@@ -1,0 +1,32 @@
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>List of posts on A Hugo website</title>
+    <link>/posts/</link>
+    <description>Recent content in List of posts on A Hugo website</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-us</language>
+    <lastBuildDate>Fri, 19 Jun 2020 00:00:00 +0000</lastBuildDate>
+    
+      <atom:link href="/posts/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+      <item>
+        <title>Golden Time Project 회의록</title>
+        <link>/posts/timeline/project-time-line/</link>
+        <pubDate>Fri, 19 Jun 2020 00:00:00 +0000</pubDate>
+        <guid>/posts/timeline/project-time-line/</guid>
+        <description>04.13자 회의프로젝트 방향성 확정제안된 서비스응급의료기관, 구급차, AED(자동심장충격기), 일반 병·의원 진료시설 등 응급상황 대처시 필요한 정보를 안내, 추천 및 필터링하는 서비스한계점 : 응급상황 시 어플보다 119 서비스를 사용.응급 의료 취약지 선정하는 데이터 분석 프로젝트.도시계획 관련 정책적 제언.현재 위치를 기반으로 응급의료 안전성을 검토해주는 서비스.해결할 일사용할 수 있는 데이터 소스 찾기.해당 응급 의료 취약지 분석 방안응급 의료 상황 발생을 분석하는 서비스.</description>
+      </item>
+    
+      <item>
+        <title>응급의료 취약지 분석</title>
+        <link>/posts/golden/final_report/</link>
+        <pubDate>Fri, 19 Jun 2020 00:00:00 +0000</pubDate>
+        <guid>/posts/golden/final_report/</guid>
+        <description>프로젝트 소개주제접근성과 의료 시설 인프라 분석을 통한 종합적 응급 의료 취약지 선정
+기존 응급 의료 취약지 선정의 문제점“보건복지부는 최근 행정예고를 통해 ‘지역응급의료센터로 30분내 도달이 불가능하거나, 권역응급의료센터로 1시간 이내 도달이 불가능한 인구가 지역 내 30% 이상인 지역’을 응급의료취약지로 지정하도록 했다.”보건 복지부에서 시행한 응급 의료 취약지 지정은 아래와 같은 이유로 현 응급 의료 실태와 일치하지 않는다.
+응급의료기관의 인프라(시설)이 고려되지 않는다.“동맥박리, 사지절단 환자를 수술할 수 있는 의사는 국내 10여명뿐인데 해외출장 중이라면 다른 병원 의사를 물색해야 하고, 독극물 중독 환자에게는 해독제를 줘야 하는데, 해독제가 있는 병원도 전국에 20여곳뿐”해당 병원이 얼마나 많은 환자를 수용할 수 있으며, 어떤 응급 처치를 수행할 수 있는지에 대한 분석이 제외되어있다.</description>
+      </item>
+    
+  </channel>
+</rss>

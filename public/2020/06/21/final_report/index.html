@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en-us" itemscope itemtype="http://schema.org/WebPage">
+  <head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>응급의료 취약지 분석 - A Hugo website</title>
+  <meta name="author" content="">
+  <meta name="description" content="A website built through Hugo and blogdown.">
+
+  <meta name="generator" content="Hugo 0.72.0" />
+
+  
+  
+  
+  
+  
+  <link rel="stylesheet" href="/assets/css/external.min.css" media="screen">
+
+  
+  
+  <link rel="stylesheet" href="/assets/css/styles.css" media="screen">
+
+  <link href="//fonts.googleapis.com/css?family=Roboto:400" rel="stylesheet">
+
+  
+  
+  
+  <link rel="apple-touch-icon-precomposed" sizes="144x144" href="/src/images/apple-touch-icon.png">
+  <link rel="shortcut icon" href="/src/images/favicon.ico">
+
+  
+  <link href="/posts/index.xml" rel="alternate" type="application/rss+xml" title="A Hugo website" />
+  <link href="/posts/index.xml" rel="alternate" type="application/rss+xml" title="A Hugo website" />
+
+  <meta property="og:title" content="응급의료 취약지 분석" />
+<meta property="og:description" content="프로젝트 소개주제접근성과 의료 시설 인프라 분석을 통한 종합적 응급 의료 취약지 선정.
+기존 응급 의료 취약지 선정의 문제점“보건복지부는 최근 행정예고를 통해 ‘지역응급의료센터로 30분내 도달이 불가능하거나, 권역응급의료센터로 1시간 이내 도달이 불가능한 인구가 지역 내 30% 이상인 지역’을 응급의료취약지로 지정하도록 했다.”’접근성’만을 기준으로 삼는다.이를 통해 선정한 응급 의료 취약지 선정은 아래와 같은 이유로 현 응급 의료 실태와 일치하지 않는 경우가 발생한다.
+응급의료기관의 인프라(시설)이 고려되지 않는다." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="/2020/06/21/final_report/" />
+<meta property="article:published_time" content="2020-06-21T00:00:00+00:00" />
+<meta property="article:modified_time" content="2020-06-21T00:00:00+00:00" />
+
+  
+  <meta itemprop="name" content="응급의료 취약지 분석">
+<meta itemprop="description" content="프로젝트 소개주제접근성과 의료 시설 인프라 분석을 통한 종합적 응급 의료 취약지 선정.
+기존 응급 의료 취약지 선정의 문제점“보건복지부는 최근 행정예고를 통해 ‘지역응급의료센터로 30분내 도달이 불가능하거나, 권역응급의료센터로 1시간 이내 도달이 불가능한 인구가 지역 내 30% 이상인 지역’을 응급의료취약지로 지정하도록 했다.”’접근성’만을 기준으로 삼는다.이를 통해 선정한 응급 의료 취약지 선정은 아래와 같은 이유로 현 응급 의료 실태와 일치하지 않는 경우가 발생한다.
+응급의료기관의 인프라(시설)이 고려되지 않는다.">
+<meta itemprop="datePublished" content="2020-06-21T00:00:00&#43;00:00" />
+<meta itemprop="dateModified" content="2020-06-21T00:00:00&#43;00:00" />
+<meta itemprop="wordCount" content="2127">
+
+
+
+<meta itemprop="keywords" content="" />
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="응급의료 취약지 분석"/>
+<meta name="twitter:description" content="프로젝트 소개주제접근성과 의료 시설 인프라 분석을 통한 종합적 응급 의료 취약지 선정.
+기존 응급 의료 취약지 선정의 문제점“보건복지부는 최근 행정예고를 통해 ‘지역응급의료센터로 30분내 도달이 불가능하거나, 권역응급의료센터로 1시간 이내 도달이 불가능한 인구가 지역 내 30% 이상인 지역’을 응급의료취약지로 지정하도록 했다.”’접근성’만을 기준으로 삼는다.이를 통해 선정한 응급 의료 취약지 선정은 아래와 같은 이유로 현 응급 의료 실태와 일치하지 않는 경우가 발생한다.
+응급의료기관의 인프라(시설)이 고려되지 않는다."/>
+
+</head>
+
+  <body>
+    
+      <nav>
+  <a href="/" title="Homepage">
+    
+  </a>
+</nav>
+
+    
+    <main class="container">
+      
+  <article>
+    <header>
+      <small>
+        <time datetime="2020-06-21 00:00:00&#43;0000">2020-06-21</time></small>
+      <h1>응급의료 취약지 분석</h1>
+    </header>
+    <section>
+
+
+<div id="section-프로젝트-소개" class="section level1">
+<h1>프로젝트 소개</h1>
+<div id="section-주제" class="section level2">
+<h2>주제</h2>
+<p>접근성과 의료 시설 인프라 분석을 통한 종합적 응급 의료 취약지 선정.</p>
+</div>
+<div id="section-기존-응급-의료-취약지-선정의-문제점" class="section level2">
+<h2>기존 응급 의료 취약지 선정의 문제점</h2>
+<ul>
+<li><a href="http://www.docdocdoc.co.kr/news/articleView.html?idxno=1038322">“보건복지부는 최근 행정예고를 통해 ‘<strong>지역응급의료센터로 30분내 도달이 불가능</strong>하거나, <strong>권역응급의료센터로 1시간 이내 도달이 불가능</strong>한 인구가 지역 내 30% 이상인 지역’을 응급의료취약지로 지정하도록 했다.”</a></li>
+<li>’<strong>접근성</strong>’만을 기준으로 삼는다.</li>
+</ul>
+<p>이를 통해 선정한 응급 의료 취약지 선정은 아래와 같은 이유로 현 응급 의료 실태와 일치하지 않는 경우가 발생한다.</p>
+<ol style="list-style-type: decimal">
+<li><strong>응급의료기관의 인프라(시설)이 고려되지 않는다.</strong>
+“동맥박리, 사지절단 환자를 수술할 수 있는 의사는 국내 10여명뿐인데 해외출장 중이라면 다른 병원 의사를 물색해야 하고, 독극물 중독 환자에게는 해독제를 줘야 하는데, 해독제가 있는 병원도 전국에 20여곳뿐”
+<ul>
+<li>해당 병원이 얼마나 많은 환자를 수용할 수 있으며, 어떤 응급 처치를 수행할 수 있는지에 대한 분석이 제외되어있다.</li>
+<li>이는, 해당 자원이 부족한 응급 시설에 대한 지원 부족으로 이어질 수 있으며, 아래와 같은 문제점을 유발한다.</li>
+</ul></li>
+<li><strong>다른 병원 재이송</strong>
+<ul>
+<li>병원이 응급 진료를 거부하는 주요 이유로는, 1) 전문의 부재(23.2%), 2) 진료과 없음(13.4%) 두가지가 1, 2위를 차지</li>
+<li>추가적으로, 병상부족이 8.6%를 차지</li>
+<li>한 해 약 1050만명의 환자가 응급실을 찾지만, 다른 병원으로 재이송 되는 사례는 약 3만 3000여건이다. 이 중 전문의 부재, 진료과 없음의 이유로 재이송 되는 비율은 36.6%를 차지한다.</li>
+<li>’병상 부족’이라는 사유를 포함하면 약 1만 5000여건의 응급 상황이 의료 시설 인프라를 이유로 골든 타임을 놓치게 된다.</li>
+</ul></li>
+</ol>
+</div>
+<div id="section-프로젝트-목차" class="section level2">
+<h2>프로젝트 목차</h2>
+<p>위와 같은 현재 응급 의료 취약지 선정의 한계점으로부터, 우리는 골든타임의 측정은 단순한 인근 의료시설의 접근 시간에 대한 지수가 되어서는 안되며, 적절한 응급 인프라를 통해 정확한 진료를 받을 수 있을 때까지의 시간으로 측정되어야 한다는 점에 동의했다.</p>
+<p>프로젝트는 아래와 같이 진행된다.</p>
+<ol style="list-style-type: decimal">
+<li><p><strong>접근성 분석</strong><br />
+특정 좌표를 중심으로 제한된 반경 내에 존재하는 병원의 수를 측정한다.</p></li>
+<li><p><strong>응급 의료 시설의 인프라 점수 분석</strong><br />
+병원의 재이송 비율을 병상수와 같은 응급 환자 수용 시설과 관련된 요인에서부터, 심혈관 전문의 등, 해당 병원의 특정 질환을 갖는 응급 환자 수용 가능 여부에 대한 변수를 설정하고 이에 대한 점수를 통계적 기법을 통해 제시한다.</p></li>
+<li><p><strong>종합적 응급 의료 취약지 도출</strong><br />
+인구 밀도, 앞서 분석한 접근성, 인프라 점수를 종합적으로 분석해 응급의료 취약지를 도출한다.</p></li>
+<li><p><strong>추후 제언</strong><br />
+제언을 위한 응급의료기관 입지 선정의 최소비용 최대효율을 낼 수 있는 장소를 예측한다.</p></li>
+</ol>
+</div>
+</div>
+<div id="section-데이터-선정" class="section level1">
+<h1>데이터 선정</h1>
+<ol style="list-style-type: decimal">
+<li><p><a href="https://www.data.go.kr/data/15000563/openapi.do">공공데이터포털 - 전국 응급의료기관 조회 서비스</a><br />
+응급 의료 기관의 좌표, 인프라에 필요한 정보를 얻을 수 있었다.</p></li>
+<li><p><a href="http://www.gisdeveloper.co.kr/?p=2332">전국 행정구역 지역 좌표</a><br />
+특정 지역의 기준을 설정할 행정 구역별 좌표를 불러온다.<br />
+해당 데이터는 폴리곤 좌표로, 이를 경, 위도 좌표로 변환해 사용했다.</p></li>
+</ol>
+</div>
+<div id="section-데이터-수집" class="section level1">
+<h1>데이터 수집</h1>
+<div id="section-응급의료기관-기본-정보-조회-서비스" class="section level2">
+<h2>응급의료기관 기본 정보 조회 서비스</h2>
+<pre class="r"><code># 응급의료기관 기본정보 조회 서비스
+url = &quot;http://openapi2.e-gen.or.kr/openapi/service/rest/ErmctInfoInqireService/&quot;
+
+
+## 응급실 실시간 가용병상정보 조회 1번 오퍼레이터
+  
+operator = &quot;getEmrrmRltmUsefulSckbdInfoInqire&quot;
+Servicekey = &quot;your_service_key&quot;
+pageNo = &quot;1&quot;
+numOfRows = &quot;99&quot;
+  
+result_table_1 = tibble()
+for (i in 1:10){
+  queryParams = str_c(&quot;?serviceKey=&quot;, Servicekey, &quot;&amp;pageNo=&quot;, as.character(i), &quot;&amp;numOfRows=&quot;, &quot;50&quot;)
+  doc = xmlInternalTreeParse(str_c(url, operator, queryParams))
+  rootNode = xmlRoot(doc)
+  names = rootNode[[2]][[&#39;items&#39;]][[&#39;item&#39;]] %&gt;%
+    names()
+  tmp_tbl = xmlToDataFrame(nodes = getNodeSet(rootNode, &#39;//item&#39;)) %&gt;%
+    set_names(iconv(names, &quot;UTF-8&quot;, &quot;CP949&quot;) %&gt;% unname()) %&gt;%
+    as_tibble()
+  result_table_1 = result_table_1 %&gt;% bind_rows(.,tmp_tbl)
+}
+  
+which(result_table_1$dutyName == &quot;의료법인명지의료재단명지병원&quot;)
+result_table_1[c(23, 391),] # 이름은 같지만 지역이 다른 명지병원이므로 인정
+  # 응급의료기관 지정 병원 갯수가 대략 402개 나옵니다
+  
+write_xlsx(result_table_1, &quot;응급의료기관 기본정보 조회 서비스_1.xlsx&quot;)
+write_excel_csv(result_table_1, &quot;result_0527_12_16.csv&quot;)</code></pre>
+</div>
+<div id="section-응급의료기관-목록정보-조회" class="section level2">
+<h2>응급의료기관 목록정보 조회</h2>
+<pre class="r"><code>## 응급의료기관 조회서비스 3번 오퍼레이터 - 좌표값 찾기
+
+
+pageNo = &quot;1&quot;
+numOfRows = &quot;99&quot; # &quot;&amp;pageNo=&quot;, pageNo, &quot;&amp;numOfRows=&quot;, numOfRows
+operator = &quot;getEgytListInfoInqire&quot;
+  
+result_table_3 = tibble()
+  
+for (i in 1:402){
+  QN = result_table_1[i,1]
+  queryParams = str_c(&quot;?serviceKey=&quot;, Servicekey, &quot;&amp;QN=&quot;, QN)
+  doc = xmlInternalTreeParse(str_c(url, operator, queryParams))
+  rootNode = xmlRoot(doc)
+  tmp_tbl_2 = xmlToDataFrame(nodes = getNodeSet(rootNode, &#39;//items//hpid&#39;)) %&gt;% as_tibble(.name_repair = &quot;unique&quot;)
+  tmp_tbl_3 = xmlToDataFrame(nodes = getNodeSet(rootNode, &#39;//items//dutyName&#39;)) %&gt;% as_tibble(.name_repair = &quot;unique&quot;)
+  tmp_tbl_4 = xmlToDataFrame(nodes = getNodeSet(rootNode, &#39;//items//wgs84Lon&#39;)) %&gt;% as_tibble(.name_repair = &quot;unique&quot;)
+  tmp_tbl_5 = xmlToDataFrame(nodes = getNodeSet(rootNode, &#39;//items//wgs84Lat&#39;)) %&gt;% as_tibble(.name_repair = &quot;unique&quot;)
+  tmp_tbl_2 = tmp_tbl_2 %&gt;% bind_cols(.,tmp_tbl_3) %&gt;% bind_cols(.,tmp_tbl_4) %&gt;% bind_cols(.,tmp_tbl_5)
+  result_table_3 = result_table_3 %&gt;% bind_rows(.,tmp_tbl_2)}
+  
+
+write_xlsx(result_table_3, &quot;응급의료기관 목록정보 조회 서비스_3.xlsx&quot;)</code></pre>
+</div>
+<div id="section-중증질환자-수용가능-정보-오퍼레이터" class="section level2">
+<h2>중증질환자 수용가능 정보 오퍼레이터</h2>
+<pre class="r"><code># (2) 중증질환자 수용가능 정보 오퍼레이터
+
+operator = &quot;getSrsillDissAceptncPosblInfoInqire&quot;
+result_table_2 = tibble()
+  
+for (i in 1:40){
+  queryParams = str_c(&quot;?serviceKey=&quot;, Servicekey, &quot;&amp;pageNo=&quot;, as.character(i), &quot;&amp;numOfRows=&quot;, &quot;14&quot;)
+  doc = xmlInternalTreeParse(str_c(url, operator, queryParams))
+  rootNode = xmlRoot(doc)
+  names = rootNode[[2]][[&#39;items&#39;]][[&#39;item&#39;]] %&gt;%
+    names()
+  tmp_tbl_2 = xmlToDataFrame(nodes = getNodeSet(rootNode, &#39;//items&#39;)) %&gt;%
+    as_tibble(.name_repair = &quot;unique&quot;)
+  result_table_2 = result_table_2 %&gt;% bind_rows(.,tmp_tbl_2)}
+  
+result_table_2.df = tibble()
+for (i in 1:23){
+  for (j in 1:14){
+    result_table_2.df[j+14*(i-1),1] = str_extract(result_table_2[i,j], &quot;[가-힣]+&quot;)
+    result_table_2.df[j+14*(i-1),2] = str_extract(result_table_2[i,j], &quot;[a-zA-Z][0-9]+&quot;)
+    result_table_2.df[j+14*(i-1),3] = substr(str_extract(result_table_2[i,j], &quot;[a-zA-Z]{12}&quot;), 1, 1)
+    result_table_2.df[j+14*(i-1),4] = substr(str_extract(result_table_2[i,j], &quot;[a-zA-Z]{12}&quot;), 2, 2)
+    result_table_2.df[j+14*(i-1),5] = substr(str_extract(result_table_2[i,j], &quot;[a-zA-Z]{12}&quot;), 3, 3)
+    result_table_2.df[j+14*(i-1),6] = substr(str_extract(result_table_2[i,j], &quot;[a-zA-Z]{12}&quot;), 4, 4)
+    result_table_2.df[j+14*(i-1),7] = substr(str_extract(result_table_2[i,j], &quot;[a-zA-Z]{12}&quot;), 5, 5)
+    result_table_2.df[j+14*(i-1),8] = substr(str_extract(result_table_2[i,j], &quot;[a-zA-Z]{12}&quot;), 6, 6)
+    result_table_2.df[j+14*(i-1),9] = substr(str_extract(result_table_2[i,j], &quot;[a-zA-Z]{12}&quot;), 7, 7)
+    result_table_2.df[j+14*(i-1),10] = substr(str_extract(result_table_2[i,j], &quot;[a-zA-Z]{12}&quot;), 8, 8)
+    result_table_2.df[j+14*(i-1),11] = substr(str_extract(result_table_2[i,j], &quot;[a-zA-Z]{12}&quot;), 9, 9)
+    result_table_2.df[j+14*(i-1),12] = substr(str_extract(result_table_2[i,j], &quot;[a-zA-Z]{12}&quot;), 10, 10)
+    result_table_2.df[j+14*(i-1),13] = substr(str_extract(result_table_2[i,j], &quot;[a-zA-Z]{12}&quot;), 11, 11)
+    result_table_2.df[j+14*(i-1),14] = substr(str_extract(result_table_2[i,j], &quot;[a-zA-Z]{12}&quot;), 12, 12)}}
+result_table_2.df = result_table_2.df[1:313,]
+  
+write_xlsx(result_table_2.df, &quot;중증질환자 수용가능 정보_2.xlsx&quot;)</code></pre>
+</div>
+<div id="section-응급의료기관-기본정보-조회-오퍼레이션" class="section level2">
+<h2>응급의료기관 기본정보 조회 오퍼레이션</h2>
+<pre class="r"><code>## (5) 응급의료기관 기본정보 조회 오퍼레이션
+
+operator = &quot;getEgytBassInfoInqire&quot;
+result_table_5 = tibble()
+  
+for (i in 1:2000){
+  tic()
+  queryParams = str_c(&quot;?serviceKey=&quot;, Servicekey, &quot;&amp;pageNo=&quot;, as.character(i), &quot;&amp;numOfRows=&quot;, &quot;50&quot;)
+  doc = xmlInternalTreeParse(str_c(url, operator, queryParams))
+  rootNode = xmlRoot(doc)
+  tmp_tbl_2 = xmlToDataFrame(getNodeSet(rootNode, &quot;//item&quot;)) %&gt;% as_tibble()
+  result_table_5 = result_table_5 %&gt;% bind_rows(.,tmp_tbl_2)
+  toc()
+}
+write_xlsx(result_table_5, &quot;응급의료기관 기본정보 조회_5_1.xlsx&quot;)
+  
+table(duplicated(result_table_5$dutyName))
+}</code></pre>
+</div>
+<div id="section-외상센터-기본정보-조회-오퍼레이션" class="section level2">
+<h2>외상센터 기본정보 조회 오퍼레이션</h2>
+<pre class="r"><code>## (8) 외상센터 기본정보 조회 오퍼레이션
+
+api_call_func5 &lt;- function() {
+  operator = &quot;getStrmBassInfoInqire&quot;
+  result_table_8 = tibble()
+  for (i in 1:10){
+    queryParams = str_c(&quot;?serviceKey=&quot;, Servicekey, &quot;&amp;pageNo=&quot;, as.character(i), &quot;&amp;numOfRows=&quot;, &quot;50&quot;)
+    doc = xmlInternalTreeParse(str_c(url, operator, queryParams))
+    rootNode = xmlRoot(doc)
+    tmp_tbl_3 = xmlToDataFrame(nodes = getNodeSet(rootNode, &#39;//item&#39;)) %&gt;% as_tibble()
+    result_table_8 = result_table_8 %&gt;% bind_rows(.,tmp_tbl_3)}
+  
+  write_xlsx(result_table_8, &quot;외상센터 기본정보 조회_8.xlsx&quot;)
+}</code></pre>
+</div>
+</div>
+<div id="section-접근성-분석" class="section level1">
+<h1>접근성 분석</h1>
+<ul>
+<li>대한민국 지도에서 읍, 면, 동 단위로 각 지점에서 특정 거리 내에 있는 응급 의료 시설 거리를 합산한다. 그 중 30분 내에 도달 가능한 병원이 없는 경우 취약지역으로 선정한다. 정부는 ‘공공보건의료에 관한 법률’ 제12조 제2항 및 제3항에 의해서 응급의료분야 의료취약지를 선정하고 있는데, 구체적인 기준은 다음과 같다.</li>
+</ul>
+<p><strong>지역내 30% 이상의 인구가 지역응급의료센터로 30분 이내 도달이 불가능하거나 권역응급의료센터로 1시간 이내 도달이 불가능한 경우</strong></p>
+<p>따라서 30분 이내 도달 가능한 병원이 없는 지역을 일차적으로 응급의료취약지역으로 설정하고 시각화에 반영한다. 세부 사항은 추후 classification 과정에서 감안할 것이다.</p>
+</div>
+<div id="section-의료시설-인프라-점수-도출" class="section level1">
+<h1>의료시설 인프라 점수 도출</h1>
+<ul>
+<li><p><strong><em>목적</em></strong> : 병원이 제공하는 응급의료 서비스의 지표로 활용할 수 있는 병원 점수를 만든다.</p></li>
+<li><p><strong><em>데이터의 특성</em></strong> : 공공데이터에서 구할 수 있는 자료는 우리나라 병원 전체에 대한 자료이기 때문에 예측이나 추정 모델이 필요하지 않다.</p></li>
+<li><p><strong><em>분석방법</em></strong> : 주성분분석(PCA)을 통해 우리나라 병원 데이터의 특성을 반영한 응급의료점수를 구한다.</p></li>
+</ul>
+<div id="section-탐색적-자료-분석-eda" class="section level2">
+<h2>탐색적 자료 분석 EDA</h2>
+<div id="section-api를-통해-저장한-csv파일-불러오기" class="section level3">
+<h3>API를 통해 저장한 csv파일 불러오기</h3>
+<p>2개의 파일은 다음과 같다.</p>
+<ol style="list-style-type: decimal">
+<li>‘응급의료기관 기본정보 조회 서비스_1.csv’</li>
+<li>‘중증질환자 수용가능 정보_2.csv’</li>
+</ol>
+</div>
+<div id="section-표-합치기" class="section level3">
+<h3>표 합치기</h3>
+<p>dplyr 패키지의 inner_join함수를 통해 불러온 두개의 표를 합친다. 합칠 때 기준이 되는 것은 병원의 ID(‘hpid’)이다.</p>
+<pre class="r"><code>hpdata &lt;- inner_join(table_1, table_2, by=&#39;hpid&#39;)</code></pre>
+</div>
+<div id="section-변수선택" class="section level3">
+<h3>변수선택</h3>
+<p>응급의료에 영향을 주는 변수를 선택했다. 선택에서 제외된 변수는 ‘응급실 당직 직통연락처’, ‘외과입원실’, ‘신결과입원실’,
+‘약물중환자’, ‘화상중환자’, ‘외상중환자’, ‘소아당직 직통연락처’, ‘입력일시’, ‘신경중환자’, ‘일반중환자’, ‘신생중환자’, ‘흉부중환자’, ‘정신질환자 수용가능여부’, ’응급실 지킴이 유무’이다.</p>
+<pre class="r"><code>hpdata &lt;- hpdata %&gt;%
+  select(dutyName.x, starts_with(&#39;h&#39;), starts_with(&#39;mk&#39;))%&gt;%
+  select(-hv1, -hv4, -hv5, -hv7, -hv8, -hv9, -hv12, -hvidate, -hvcc, -hvncc, -hvccc, -hvicc, -mkioskty25, -mkioskty9)
+#glimpse(hpdata)
+#str(hpdata)</code></pre>
+</div>
+<div id="section-변수-별로-변수가-취하는-값의-개수" class="section level3">
+<h3>변수 별로 변수가 취하는 값의 개수</h3>
+<p>변수가 취할 수 있는 값의 개수를 확인하여 변수의 특성을 확인하였다.</p>
+<pre class="r"><code>nuniq &lt;- c()
+for(i in 1:length(colnames(hpdata))) {
+  nuniq[i] &lt;- hpdata[,i] %&gt;%
+  n_distinct()
+}
+nuniq</code></pre>
+<pre><code>##  [1] 312 313   3   3  13  12   9   1   1   2  35 140   3  29   2   2   2   2   2
+## [20]   2   2   2   2   2   2</code></pre>
+</div>
+<div id="section-분산이-0인-변수를-제거" class="section level3">
+<h3>분산이 0인 변수를 제거</h3>
+<pre class="r"><code>hpdata &lt;- hpdata[,nuniq!=1]</code></pre>
+<pre class="r"><code>#str(hpdata)
+nuniq &lt;- c()
+for(i in 1:length(colnames(hpdata))) {
+  nuniq[i] &lt;- hpdata[,i] %&gt;%
+  n_distinct()
+}
+nuniq</code></pre>
+<pre><code>##  [1] 312 313   3   3  13  12   9   2  35 140   3  29   2   2   2   2   2   2   2
+## [20]   2   2   2   2</code></pre>
+</div>
+<div id="section-과-1-또는-yes와-no로-나뉘는-가변수들을-따로-분리한다." class="section level3">
+<h3>0과 1, 또는 Yes와 No로 나뉘는 가변수들을 따로 분리한다.</h3>
+<pre class="r"><code>hpdata_f &lt;- hpdata[,nuniq&lt;=3]
+hpdata_n &lt;- hpdata[,nuniq&gt;3]</code></pre>
+</div>
+<div id="section-가변수들이-0과-1로-통일되도록-하고-분리했던-변수들을-다시-합친다." class="section level3">
+<h3>가변수들이 0과 1로 통일되도록 하고 분리했던 변수들을 다시 합친다.</h3>
+<pre class="r"><code>hpdata_f &lt;- hpdata_f %&gt;%
+  mutate_all(funs(recode(., &#39;N1&#39;=0L, &#39;0&#39;=0L, &#39;N&#39;=0L, &#39;1&#39;=1L, &#39;Y&#39;=1L, .default=1L)))</code></pre>
+<pre><code>## Warning: funs() is soft deprecated as of dplyr 0.8.0
+## Please use a list of either functions or lambdas: 
+## 
+##   # Simple named list: 
+##   list(mean = mean, median = median)
+## 
+##   # Auto named with `tibble::lst()`: 
+##   tibble::lst(mean, median)
+## 
+##   # Using lambdas
+##   list(~ mean(., trim = .2), ~ median(., na.rm = TRUE))
+## This warning is displayed once per session.</code></pre>
+<pre class="r"><code>#str(hpdata_f)</code></pre>
+<pre class="r"><code>hpdata &lt;- bind_cols(hpdata_n, hpdata_f)
+#glimpse(hpdata)</code></pre>
+</div>
+<div id="section-각변수를-평균0-분산1로-정규화-한다." class="section level3">
+<h3>각변수를 평균=0, 분산=1로 정규화 한다.</h3>
+<pre class="r"><code>hpdata_z &lt;- hpdata %&gt;%
+  mutate_each_(funs(scale), vars=colnames(hpdata)[3:length(colnames(hpdata))])</code></pre>
+<pre><code>## Warning: mutate_each() is deprecated
+## Please use mutate_if(), mutate_at(), or mutate_all() instead: 
+## 
+##   - To map `funs` over all variables, use mutate_all()
+##   - To map `funs` over a selection of variables, use mutate_at()
+## This warning is displayed once per session.</code></pre>
+<pre class="r"><code>write.csv(hpdata_z, file=&quot;scaled_data.csv&quot;, row.names = FALSE)</code></pre>
+</div>
+<div id="section-공선성-진단" class="section level3">
+<h3>공선성 진단</h3>
+<pre class="r"><code>multi &lt;- lm(1:nrow(hpdata_z)~hv2+hv3+hv6+hvec+hvgc+hvoc+hv10+hv11+hvctayn+hvmriayn+hvventiayn+mkioskty1+mkioskty2+mkioskty3+mkioskty4+ mkioskty5+mkioskty6+mkioskty7+mkioskty8+mkioskty10+mkioskty11, data = hpdata_z, na.action = na.omit)
+#alias(multi)
+car::vif(multi)</code></pre>
+<pre><code>## Registered S3 methods overwritten by &#39;car&#39;:
+##   method                          from
+##   influence.merMod                lme4
+##   cooks.distance.influence.merMod lme4
+##   dfbeta.influence.merMod         lme4
+##   dfbetas.influence.merMod        lme4</code></pre>
+<pre><code>##        hv2        hv3        hv6       hvec       hvgc       hvoc       hv10 
+##   1.648138   1.804007   1.310922   1.172805   1.423420   1.990656   3.922743 
+##       hv11    hvctayn   hvmriayn hvventiayn  mkioskty1  mkioskty2  mkioskty3 
+##   3.705282   1.064415   1.241541   1.040046   5.162917   1.146055   1.888297 
+##  mkioskty4  mkioskty5  mkioskty6  mkioskty7  mkioskty8 mkioskty10 mkioskty11 
+##   1.065774   1.921428   1.510778   1.204425   1.497130   4.948495   1.806278</code></pre>
+<p>공선성이 진단되지 않았기 때문에 주성분분석을 통해 구성된 점수를 해석하는 것이 가능하다.</p>
+<hr />
+</div>
+</div>
+<div id="section-주성분-분석" class="section level2">
+<h2>주성분 분석</h2>
+<div id="section-주성분-분석-1" class="section level3">
+<h3>주성분 분석</h3>
+<pre class="r"><code>hp_without_id &lt;- hpdata_z[,3:length(colnames(hpdata_z))] %&gt;%
+    as.matrix()
+hp_pca &lt;- prcomp(hp_without_id)
+hp_pca[[1]] # 각 축들의 표준편차</code></pre>
+<pre><code>##  [1] 2.4640138 1.4604035 1.1503789 1.1001873 1.0338242 1.0028248 0.9710373
+##  [8] 0.9232028 0.9178061 0.8724288 0.8465890 0.8015302 0.7876133 0.7293690
+## [15] 0.7199176 0.6583633 0.6379101 0.5822163 0.5341394 0.4156376 0.3489150</code></pre>
+<pre class="r"><code>hp_pca[[2]][,1:3] # 1~3번째 축에서 나타나는 변수별 가중치</code></pre>
+<pre><code>##                     PC1         PC2           PC3
+## hv2        -0.211650295  0.19373284 -0.3158966648
+## hv3        -0.231976885  0.24112014 -0.2239434189
+## hv6        -0.191622689  0.14314715  0.0752503786
+## hvec       -0.001037467 -0.30158910 -0.3019287589
+## hvgc       -0.203638091  0.11176093 -0.3639099076
+## hvoc       -0.303645758  0.07992349  0.0192952747
+## hv10       -0.340716971  0.12351172  0.0666368229
+## hv11       -0.330806531  0.12716515  0.0163566790
+## hvctayn    -0.036935955 -0.13979331 -0.3129325605
+## hvmriayn   -0.109943424 -0.24594244 -0.4490333710
+## hvventiayn -0.014754296  0.06661759 -0.0908370136
+## mkioskty1  -0.347272730  0.06151047  0.1924964960
+## mkioskty2  -0.009038952 -0.27383190  0.2288905515
+## mkioskty3  -0.223295924 -0.32213302  0.0025165158
+## mkioskty4  -0.036313568 -0.13149276 -0.2608733054
+## mkioskty5  -0.252634423 -0.22298420 -0.0418016274
+## mkioskty6  -0.125735546 -0.45143665  0.1436298878
+## mkioskty7  -0.136599168 -0.19146390  0.2733836558
+## mkioskty8  -0.157872266 -0.40147944 -0.0008365266
+## mkioskty10 -0.347124224  0.07244286  0.1787771317
+## mkioskty11 -0.276114493  0.04090011  0.1460502878</code></pre>
+<p>첫번째 축을 보면 모든 변수들의 가중치가 같은 방향으로 부여되는 것을 확인할 수 있다.
+<span class="math display">\[y=\beta_1X_1+\beta_2X_2+\beta_3X_3+ ... \beta_{21}X_{21}\]</span>이고, 각 <span class="math inline">\(\beta\)</span>들은 음의 값으로 나왔기 때문에, -y에 적절한 상수를 곱하고 더하여 병원 점수를 구성할 수 있다.</p>
+</div>
+<div id="section-설명된-분산의-양-r2" class="section level3">
+<h3>설명된 분산의 양: <span class="math inline">\(R^2\)</span></h3>
+<p>첫번째 축은 전체 분산의 28.9%를 설명한다. 그 다음 축들이 설명하는 분산의 양은 10.2%, 6.3%, … 로 첫번째 축에 비해 급격하게 줄어드는 모습을 볼 수 있다.</p>
+<pre class="r"><code>summary(hp_pca)</code></pre>
+<pre><code>## Importance of components:
+##                           PC1    PC2     PC3     PC4     PC5     PC6    PC7
+## Standard deviation     2.4640 1.4604 1.15038 1.10019 1.03382 1.00282 0.9710
+## Proportion of Variance 0.2891 0.1016 0.06302 0.05764 0.05089 0.04789 0.0449
+## Cumulative Proportion  0.2891 0.3907 0.45369 0.51133 0.56222 0.61011 0.6550
+##                            PC8     PC9    PC10    PC11    PC12    PC13    PC14
+## Standard deviation     0.92320 0.91781 0.87243 0.84659 0.80153 0.78761 0.72937
+## Proportion of Variance 0.04059 0.04011 0.03624 0.03413 0.03059 0.02954 0.02533
+## Cumulative Proportion  0.69560 0.73571 0.77196 0.80609 0.83668 0.86622 0.89155
+##                           PC15    PC16    PC17    PC18    PC19    PC20   PC21
+## Standard deviation     0.71992 0.65836 0.63791 0.58222 0.53414 0.41564 0.3489
+## Proportion of Variance 0.02468 0.02064 0.01938 0.01614 0.01359 0.00823 0.0058
+## Cumulative Proportion  0.91623 0.93687 0.95625 0.97239 0.98598 0.99420 1.0000</code></pre>
+<p>설명된 분산의 양을 scree plot을 통해 나타내면 다음과 같다.</p>
+<pre class="r"><code>screeplot(hp_pca, col = &quot;blue&quot;, type = &quot;lines&quot;, pch = 21, main=&quot;Scree Plot&quot;)</code></pre>
+<p><img src="/post/2020-06-19-final-report_files/figure-html/unnamed-chunk-21-1.png" width="672" /></p>
+</div>
+<div id="section-첫번째-축을-활용하여-병원-점수-구성하기" class="section level3">
+<h3>첫번째 축을 활용하여 병원 점수 구성하기</h3>
+<div id="section-점수의-평균은-100-표준편차는-20이다." class="section level5">
+<h5>점수의 평균은 100, 표준편차는 20이다.</h5>
+<pre class="r"><code>hp_pc1 &lt;- predict(hp_pca)[,1] # 첫번째 축에 각 데이터를 정사영하여 병원점수를 구성한다.
+hp_score &lt;- (100-20*scale(hp_pc1))
+hospital_score &lt;- hpdata %&gt;%
+  select(dutyName.x,hpid)%&gt;%
+  mutate(score=hp_score)     # 병원이름, 병원ID, 병원점수를 선택하여 &#39;hospital_score&#39;라는 표를 만든다. 
+skim(hospital_score)</code></pre>
+<table>
+<caption><span id="tab:unnamed-chunk-22">Table 1: </span>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">hospital_score</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">313</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">3</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">character</td>
+<td align="left">2</td>
+</tr>
+<tr class="odd">
+<td align="left">numeric</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: character</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">min</th>
+<th align="right">max</th>
+<th align="right">empty</th>
+<th align="right">n_unique</th>
+<th align="right">whitespace</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">dutyName.x</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">3</td>
+<td align="right">23</td>
+<td align="right">0</td>
+<td align="right">312</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td align="left">hpid</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">8</td>
+<td align="right">8</td>
+<td align="right">0</td>
+<td align="right">313</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">score</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">100</td>
+<td align="right">20</td>
+<td align="right">67.9</td>
+<td align="right">84.92</td>
+<td align="right">92.55</td>
+<td align="right">110.11</td>
+<td align="right">164.63</td>
+<td align="left">▆▇▂▃▁</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="section-병원점수-시각화" class="section level3">
+<h3>병원점수 시각화</h3>
+<pre class="r"><code>library(ggplot2)
+ggplot(hospital_score, aes(x=score))+
+  geom_histogram(fill=&#39;sky blue&#39;, binwidth = 3)</code></pre>
+<p><img src="/post/2020-06-19-final-report_files/figure-html/unnamed-chunk-23-1.png" width="672" /></p>
+</div>
+<div id="section-병원점수-.csv-파일로-내보내기" class="section level3">
+<h3>병원점수 .csv 파일로 내보내기</h3>
+<pre class="r"><code>write.csv(hospital_score, file = &#39;hospital_score&#39;, row.names = FALSE)</code></pre>
+<pre class="r"><code>hp_score[hp_score &gt; 112.5] %&gt;% #상위 점수의 평균
+  mean()</code></pre>
+<pre><code>## [1] 131.7687</code></pre>
+<pre class="r"><code>hp_score[hp_score &lt; 112.5] %&gt;% #하위 점수의 평균
+  mean()</code></pre>
+<pre><code>## [1] 89.81257</code></pre>
+<hr />
+</div>
+</div>
+<div id="section-입력-변수에-따라-점수-만들기" class="section level2">
+<h2>입력 변수에 따라 점수 만들기</h2>
+<div id="section-소개" class="section level3">
+<h3>소개</h3>
+<ul>
+<li>변수 입력에 따라 병원점수를 만들어주는 함수를 만들었다.</li>
+</ul>
+</div>
+<div id="section-입력값" class="section level3">
+<h3>입력값</h3>
+<ul>
+<li>c(“응급실”, “hv2”)와 같이 문자벡터를 입력해야 한다. 한글명과 영문명 모두 입력 가능하다.</li>
+</ul>
+</div>
+<div id="section-함수-종류" class="section level3">
+<h3>함수 종류</h3>
+<ul>
+<li><p>LetsMakeScore_Score - dplyr 패키지의 skim 함수를 통해 점수를 요약해준다.</p></li>
+<li><p>LetsMakeScore_Plot - histogram을 그려준다.</p></li>
+<li><p>LetsMakeScore_CSV - .csv 파일로 점수를 내보낸다. csv파일에서는 병원 이름과 병원 ID를 함께 확인할 수 있다.</p></li>
+</ul>
+</div>
+<div id="section-사용할-수-있는-변수" class="section level3">
+<h3>사용할 수 있는 변수</h3>
+<table>
+<thead>
+<tr class="header">
+<th><em>한글명</em></th>
+<th><em>영어명</em></th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>내과중환자실</td>
+<td>hv2</td>
+</tr>
+<tr class="even">
+<td>외과중환자실</td>
+<td>hv3</td>
+</tr>
+<tr class="odd">
+<td>신경외과중환자실</td>
+<td>hv6</td>
+</tr>
+<tr class="even">
+<td>응급실</td>
+<td>hvec</td>
+</tr>
+<tr class="odd">
+<td>입원실</td>
+<td>hvgc</td>
+</tr>
+<tr class="even">
+<td>수술실</td>
+<td>hvoc</td>
+</tr>
+<tr class="odd">
+<td>소아</td>
+<td>hv10</td>
+</tr>
+<tr class="even">
+<td>인큐베이터</td>
+<td>hv11</td>
+</tr>
+<tr class="odd">
+<td>CT</td>
+<td>hvctayn</td>
+</tr>
+<tr class="even">
+<td>MRI</td>
+<td>hvmriayn</td>
+</tr>
+<tr class="odd">
+<td>인공호흡기</td>
+<td>hvventiayn</td>
+</tr>
+<tr class="even">
+<td>뇌출혈수술</td>
+<td>mkioskty1</td>
+</tr>
+<tr class="odd">
+<td>뇌경색수술</td>
+<td>mkioskty2</td>
+</tr>
+<tr class="even">
+<td>심근경색수술</td>
+<td>mkioskty3</td>
+</tr>
+<tr class="odd">
+<td>복부손상수술</td>
+<td>mkioskty4</td>
+</tr>
+<tr class="even">
+<td>사지접합수술</td>
+<td>mkioskty5</td>
+</tr>
+<tr class="odd">
+<td>응급내시경</td>
+<td>mkioskty6</td>
+</tr>
+<tr class="even">
+<td>응급투석</td>
+<td>mkioskty7</td>
+</tr>
+<tr class="odd">
+<td>조산산모</td>
+<td>mkioskty8</td>
+</tr>
+<tr class="even">
+<td>신생아</td>
+<td>mkioskty10</td>
+</tr>
+<tr class="odd">
+<td>중증화상</td>
+<td>mkioskty11</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="section-함수-사용-예시" class="section level3">
+<h3>함수 사용 예시</h3>
+<pre class="r"><code>LetsMakeScore_Plot(c(&quot;응급실&quot;,&quot;입원실&quot;,&quot;수술실&quot;))</code></pre>
+<p><img src="/post/2020-06-19-final-report_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<pre class="r"><code>#LetsMakeScore_Plot(c(&quot;CT&quot;,&quot;MRI&quot;,&quot;응급실&quot;, &quot;수술실&quot;))</code></pre>
+<pre class="r"><code>LetsMakeScore_Score(c(&quot;응급실&quot;,&quot;입원실&quot;,&quot;수술실&quot;))</code></pre>
+<table>
+<caption><span id="tab:unnamed-chunk-27">Table 2: </span>Data summary</caption>
+<tbody>
+<tr class="odd">
+<td align="left">Name</td>
+<td align="left">Piped data</td>
+</tr>
+<tr class="even">
+<td align="left">Number of rows</td>
+<td align="left">313</td>
+</tr>
+<tr class="odd">
+<td align="left">Number of columns</td>
+<td align="left">1</td>
+</tr>
+<tr class="even">
+<td align="left">_______________________</td>
+<td align="left"></td>
+</tr>
+<tr class="odd">
+<td align="left">Column type frequency:</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">numeric</td>
+<td align="left">1</td>
+</tr>
+<tr class="odd">
+<td align="left">________________________</td>
+<td align="left"></td>
+</tr>
+<tr class="even">
+<td align="left">Group variables</td>
+<td align="left">None</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Variable type: numeric</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">skim_variable</th>
+<th align="right">n_missing</th>
+<th align="right">complete_rate</th>
+<th align="right">mean</th>
+<th align="right">sd</th>
+<th align="right">p0</th>
+<th align="right">p25</th>
+<th align="right">p50</th>
+<th align="right">p75</th>
+<th align="right">p100</th>
+<th align="left">hist</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">score</td>
+<td align="right">0</td>
+<td align="right">1</td>
+<td align="right">100</td>
+<td align="right">20</td>
+<td align="right">71.21</td>
+<td align="right">86.81</td>
+<td align="right">95.09</td>
+<td align="right">108.02</td>
+<td align="right">233.5</td>
+<td align="left">▇▃▁▁▁</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>#LetsMakeScore_Score(c(&quot;CT&quot;,&quot;MRI&quot;,&quot;응급실&quot;, &quot;수술실&quot;))</code></pre>
+<pre class="r"><code>LetsMakeScore_CSV(c(&quot;응급실&quot;,&quot;입원실&quot;,&quot;수술실&quot;))
+#LetsMakeScore_CSV(c(&quot;CT&quot;,&quot;MRI&quot;,&quot;응급실&quot;, &quot;수술실&quot;))</code></pre>
+</div>
+</div>
+</div>
+</section>
+    <footer>
+      <hr>
+      <div class="meta">
+        <p class="tags">
+          
+        </p>
+      </div>
+      <hr>
+      
+    </footer>
+  </article>
+
+    </main>
+    
+      <footer>
+  <p>
+    &copy; 2020 .
+  </p>
+  <p>
+    Powered by <a href="https://gohugo.io" title="A Fast and Flexible Website Generator">Hugo</a> &amp; <a href="https://github.com/eshlox/simplicity" title="Hugo theme">Simplicity</a>.
+  </p>
+</footer>
+
+    
+    
+    
+    
+    
+    
+    
+    <script src="/assets/js/scripts.min.js"></script>
+    
+  </body>
+</html>
