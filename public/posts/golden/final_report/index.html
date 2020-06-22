@@ -48,7 +48,7 @@
 응급의료기관의 인프라(시설)이 고려되지 않는다.“동맥박리, 사지절단 환자를 수술할 수 있는 의사는 국내 10여명뿐인데 해외출장 중이라면 다른 병원 의사를 물색해야 하고, 독극물 중독 환자에게는 해독제를 줘야 하는데, 해독제가 있는 병원도 전국에 20여곳뿐”해당 병원이 얼마나 많은 환자를 수용할 수 있으며, 어떤 응급 처치를 수행할 수 있는지에 대한 분석이 제외되어있다.">
 <meta itemprop="datePublished" content="2020-06-19T00:00:00&#43;00:00" />
 <meta itemprop="dateModified" content="2020-06-19T00:00:00&#43;00:00" />
-<meta itemprop="wordCount" content="1854">
+<meta itemprop="wordCount" content="2283">
 
 
 
@@ -119,7 +119,7 @@
 <li><p><strong>응급 의료 시설의 인프라 점수 분석</strong><br />
 병원의 재이송 비율을 병상수와 같은 응급 환자 수용 시설과 관련된 요인에서부터, 심혈관 전문의 등, 해당 병원의 특정 질환을 갖는 응급 환자 수용 가능 여부에 대한 변수를 설정하고 이에 대한 점수를 통계적 기법을 통해 제시한다.</p></li>
 <li><p><strong>최종 시각화</strong><br />
-인구 밀도, 앞서 분석한 접근성, 인프라 점수를 종합적으로 분석해 응급의료 취약지를 시각화한다.<br />
+앞서 분석한 접근성, 인프라 점수를 종합적으로 분석해 응급의료 취약지를 시각화한다.<br />
 이를 통해, 응급의료기관 입지 선정의 최소비용 최대효율을 낼 수 있는 장소를 예측한다.</p></li>
 </ol>
 <hr />
@@ -737,6 +737,164 @@ ggplot(hospital_score, aes(x=score))+
 <ul>
 <li>병원명 + 응급 의료 인프라 점수를 통한 히스토그램</li>
 </ul>
+<p>아래는 Shiny app 구현을 위한 코드, (실행 문제로 코드만 첨부)</p>
+<pre class="r"><code>library(tidyverse)
+library(sp)
+library(rgdal)
+library(geosphere)
+library(shiny)
+library(shinydashboard)
+library(leaflet)
+library(DT)
+library(data.table)
+library(ggplot2)
+
+myfile = file.path(&quot;data&quot;)
+SIG_1 = readOGR(myfile, &quot;SIG_1&quot;)
+hpdata_z &lt;- read.csv(&quot;data/scaled_data.csv&quot;)
+
+I &lt;- function(x) {
+    Input &lt;- c(x) %&gt;%
+        recode(&quot;내과중환자실&quot;=&quot;hv2&quot;, 
+               &quot;외과중환자실&quot;=&quot;hv3&quot;, 
+               &quot;신경외과중환자실&quot;=&quot;hv6&quot;,
+               &quot;응급실&quot;=&quot;hvec&quot;,
+               &quot;입원실&quot;=&quot;hvgc&quot;, 
+               &quot;수술실&quot;=&quot;hvoc&quot;, 
+               &quot;소아&quot;=&quot;hv10&quot;,
+               &quot;인큐베이터&quot;=&quot;hv11&quot;, 
+               &quot;CT&quot;=&quot;hvctayn&quot;,
+               &quot;MRI&quot;=&quot;hvmriayn&quot;,
+               &quot;인공호흡기&quot;=&quot;hvventiayn&quot;, 
+               &quot;뇌출혈수술&quot;=&quot;mkioskty1&quot;,
+               &quot;뇌경색수술&quot;=&quot;mkioskty2&quot;,
+               &quot;심근경색수술&quot;=&quot;mkioskty3&quot;,
+               &quot;복부손상수술&quot;=&quot;mkioskty4&quot;,
+               &quot;사지접합수술&quot;=&quot;mkioskty5&quot;,
+               &quot;응급내시경&quot;=&quot;mkioskty6&quot;,
+               &quot;응급투석&quot;=&quot;mkioskty7&quot;,
+               &quot;조산산모&quot;=&quot;mkioskty8&quot; ,
+               &quot;신생아&quot;=&quot;mkioskty10&quot;, 
+               &quot;중증화상&quot;=&quot;mkioskty11&quot;)
+    return(Input)
+}
+
+LetsMakeScore_Plot &lt;- function(x) {
+    hpdata_z_tmp &lt;- hpdata_z
+    sc &lt;- hpdata_z_tmp %&gt;%
+        select(I(x))%&gt;%
+        prcomp()
+    sc_2 &lt;- predict(sc)[,1]
+    ifelse(sum(sc[[2]][,1]) &gt; 0, sc &lt;- sc_2, sc &lt;- -sc_2)  
+    sc &lt;- 100+20*scale(sc)
+    sc &lt;- ifelse(sc&lt;0, 0, sc)
+    hp_score &lt;- hpdata_z_tmp %&gt;%
+        select(dutyName.x, hpid) %&gt;%
+        mutate(score= sc)
+    hp_score %&gt;%
+        ggplot(aes(x=score)) +
+        geom_histogram(fill=&#39;sky blue&#39;, binwidth = 3)+
+        xlab(&quot;점수 분포&quot;)+
+        ylab(&quot;병원 수&quot;)+
+        theme_bw()+
+        theme(axis.title.x = element_text(size = 15))+
+        theme(axis.title.y = element_text(size = 15))
+}
+
+LetsMakeScore_Score &lt;- function(x) {
+    sc &lt;- hpdata_z %&gt;%
+        select(I(x))%&gt;%
+        prcomp()
+    sc_2 &lt;- predict(sc)[,1]
+    ifelse(sum(sc[[2]][,1]) &gt; 0, sc &lt;- sc_2, sc &lt;- -sc_2)  
+    sc &lt;- 100+20*scale(sc)
+    sc &lt;- ifelse(sc&lt;0, 0, sc)
+    hp_score &lt;- hpdata_z %&gt;%
+        select(dutyName.x, hpid) %&gt;%
+        mutate(score= sc)
+    hp_score %&gt;%
+        select(dutyName.x, hpid, score)
+}
+
+bins = c(0, 4.476, 13.739, 32.531, 40.033, 84, Inf)
+pal = colorBin(&quot;YlGnBu&quot;, domain = SIG_1@data$score_num, bins = bins)
+
+labels &lt;- sprintf(
+    &quot;&lt;strong&gt;%s&lt;/strong&gt;&lt;br/&gt;%g points&quot;,
+    SIG_1@data$SIG_ENG_NM, SIG_1@data$score_num
+) %&gt;% lapply(htmltools::HTML)
+# &#39;CartoDB.Positron&#39;
+
+header = dashboardHeader(title = &quot;Golden-Time&quot;)
+
+sidebar = dashboardSidebar(
+    sidebarMenu(
+        menuItem(&quot;Dashboard&quot;, tabName = &quot;dashboard&quot;, icon = icon(&quot;dashboard&quot;)),
+        menuItem(&quot;Widgets&quot;, tabName = &quot;tables&quot;, icon = icon(&quot;th&quot;))))
+
+body = dashboardBody(
+    tabItems(
+        tabItem(tabName = &quot;dashboard&quot;, h2(&quot;전국 시군구 단위 응급의료기관 접근성 점수화&quot;),
+                fluidRow( 
+                    leafletOutput(outputId = &quot;mymap&quot;, height = &quot;800px&quot;, width = &quot;125%&quot;))),
+        tabItem(tabName = &quot;tables&quot;, h2(&quot;Widgets&quot;),
+                fluidRow(selectInput(&quot;Variable&quot;, &quot;   병원 점수를 알고 싶은 항목을 고르세요 &quot;, list(&quot;내과중환자실&quot;, &quot;외과중환자실&quot;, &quot;신경외과중환자실&quot;,
+                                                                                   &quot;응급실&quot;,&quot;입원실&quot;,&quot;수술실&quot;, &quot;소아&quot;,
+                                                                                   &quot;인큐베이터&quot;, 
+                                                                                   &quot;CT&quot;,
+                                                                                   &quot;MRI&quot;,
+                                                                                   &quot;인공호흡기&quot;, 
+                                                                                   &quot;뇌출혈수술&quot;,
+                                                                                   &quot;뇌경색수술&quot;,
+                                                                                   &quot;심근경색수술&quot;,
+                                                                                   &quot;복부손상수술&quot;,
+                                                                                   &quot;사지접합수술&quot;,
+                                                                                   &quot;응급내시경&quot;,
+                                                                                   &quot;응급투석&quot;,
+                                                                                   &quot;조산산모&quot;,
+                                                                                   &quot;신생아&quot;, 
+                                                                                   &quot;중증화상&quot;)),
+                         box(title = &quot;Table&quot;, dataTableOutput(outputId = &quot;mytable&quot;)),
+                         box(title = &quot;Plot&quot;, plotOutput(outputId = &quot;myplot&quot;)),
+                         box(title = &quot;File&quot;, downloadButton(outputId = &quot;file&quot;, label = &quot;Download the score file&quot;))
+                ))))
+
+ui &lt;- dashboardPage(header, sidebar, body)
+
+server &lt;- function(input, output) {
+    output$menu &lt;- renderMenu({
+        menuItem(&quot;Dashboard&quot;, tabName = &quot;dashboard&quot;, icon = icon(&quot;dashboard&quot;))
+        menuItem(&quot;Widgets&quot;, tabName = &quot;tables&quot;, icon = icon(&quot;th&quot;))
+    })
+    pal2 = colorNumeric(&quot;viridis&quot;, SIG_1@data$score_num, reverse=TRUE)
+    
+    output$mymap = renderLeaflet({
+        leaflet(SIG_1) %&gt;%
+            setView(lng=127.7669,lat=35.90776, zoom=7.5) %&gt;%
+            addProviderTiles(&quot;MapBox&quot;, options = providerTileOptions(
+                id = &quot;mapbox.light&quot;,
+                accessToken = Sys.getenv(&#39;MAPBOX_ACCESS_TOKEN&#39;))) %&gt;%
+            addPolygons(color=&#39;#444444&#39;, 
+                        weight=2, opacity = 1.0, fillOpacity = 0.5, 
+                        fillColor=~pal(score_num),
+                        label = labels,
+                        labelOptions = labelOptions(
+                            style = list(&quot;font-weight&quot; = &quot;normal&quot;, padding = &quot;3px 8px&quot;),
+                            textsize = &quot;15px&quot;,
+                            direction = &quot;auto&quot;)
+            ) %&gt;%
+            addLegend(pal = pal, values = ~score_num, opacity = 0.7, title = &quot;Emergency Score&quot;,
+                      position = &quot;bottomright&quot;)})
+    
+    output$mytable = renderDataTable({datatable(LetsMakeScore_Score(input$Variable))})
+    output$myplot = renderPlot({LetsMakeScore_Plot(input$Variable)})
+    output$file = downloadHandler(filename = function(){
+        paste(input$Variable, &quot;-&quot;, Sys.Date(), &quot;.csv&quot;, sep=&quot;&quot;)
+    }, 
+    content = function(go){write.csv(data.frame(LetsMakeScore_Score(input$Variable)), go)})
+}
+
+shinyApp(ui, server)</code></pre>
 </div>
 </section>
     <footer>
@@ -761,6 +919,28 @@ ggplot(hospital_score, aes(x=score))+
     Powered by <a href="https://gohugo.io" title="A Fast and Flexible Website Generator">Hugo</a> &amp; <a href="https://github.com/eshlox/simplicity" title="Hugo theme">Simplicity</a>.
   </p>
 </footer>
+&lt;
+
+    <script src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS_HTML"></script>
+    
+    <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+        tex2jax: {
+            inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+            displayMath: [ ['$$','$$'], ["\\[","\\]"] ],
+            processEscapes: true,
+            processEnvironments: true
+        },
+        // Center justify equations in code and markdown cells. Elsewhere
+        // we use CSS to left justify single line equations in code cells.
+        displayAlign: 'center',
+        "HTML-CSS": {
+            styles: {'.MathJax_Display': {"margin": 0}},
+            linebreaks: { automatic: true }
+        }
+    });
+    </script>
+    
 
     
     
