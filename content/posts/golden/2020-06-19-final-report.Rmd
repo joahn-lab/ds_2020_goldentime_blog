@@ -568,13 +568,76 @@ LetsMakeScore_CSV(c("응급실","입원실","수술실"))
 - 인터렉티브 시각화를 위해 shiny app을 사용했다. 시각화 항목은 다음과 같다.  
 
 1. 접근성 점수  
-  - 행정구역을 기준으로 해당 지역에서 응급 의료 접근성 점수를 시각화했다.
+  - 행정구역을 기준으로 해당 지역에서 응급 의료 접근성 점수를 시각화했다.  
+  
+아래는 하버사인을 통해 거리를 계산하는 코드이다.
+```{r, eval=FALSE}
+library(sp)
+library(rgdal)
+
+TL = readOGR(mylocation, "TL_SCCO_LI") # 첫 인자에 파일 위치, 두번째 인자에 파일명
+
+# 불러온 공간 데이터 내에서 좌표계 방식 변환  (UTM-K -> WGS84)
+
+# from.crs = TL@proj4string
+from_crs = CRS("+proj=tmerc +lat_0=38 +lon_0=127.5 +k=0.9996 +x_0=1000000 +y_0=2000000 +ellps=GRS80 +units=m +no_defs")
+to_crs = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
+
+proj4string(TL) = from_crs
+TL_1 = spTransform(TL, to_crs)
+
+tmp_1 = TL_1@data
+
+for (i in 1:nrow(tmp_1)){
+  tmp_1$x_coord[i] = parse_number(as.character(TL_1@polygons[[i]]@labpt)[1])
+  tmp_1$y_coord[i] = parse_number(as.character(TL_1@polygons[[i]]@labpt)[2])
+}
+
+# Haversine 공식으로 거리 계산
+
+library(geosphere)
+
+dist = list()
+for (i in 1:nrow(tmp_1)){
+dist[[i]] = c(tmp_1$x_coord[i], tmp_1$y_coord[i])
+}
+
+medi = list()
+for (i in 1:nrow(result_table_3)){
+  medi[[i]] = c(parse_number(result_table_3$text2[i]), parse_number(result_table_3$text3[i]))
+}
+
+# 거리 계산하여 30km 이내에 도달 가능한 응급의료기관 수 계산
+
+tmp_1$num = 0
+for (i in 1:length(dist)){
+  for (j in 1:length(medi)){
+  ifelse(distHaversine(dist[[i]], medi[[j]])<30000, tmp_1$num[i] <- tmp_1$num[i]+1, next)
+  }
+}
+
+write.csv(tmp_1, "Haversine_list.csv")
+
+# 간단한 인터랙티브 시각화
+library(leaflet)
+
+TL_1 = sp::merge(TL_1, tmp_1)
+pal2 = colorNumeric("viridis", TL_1@data$num, reverse=TRUE)
+
+leaflet(TL_1) %>%
+  setView(lng=127.7669,lat=35.90776, zoom=7) %>%
+  addProviderTiles('CartoDB.Positron') %>%
+  addPolygons(color='#444444', weight=0.5, opacity = 1.0, fillOpacity = 0.5, fillColor=~pal2(num))
+
+
+```
+  
   
 2. 응급 의료 인프라 점수
   - 병원명 + 응급 의료 인프라 점수를 통한 히스토그램
 
 
-아래는 Shiny app 구현을 위한 코드, (실행 문제로 코드만 첨부)
+아래는 응급 의료 인프라 점수 계산을 위한 시각화 코드이다.
 ```{r, eval=FALSE}
 library(tidyverse)
 library(sp)
@@ -730,82 +793,6 @@ server <- function(input, output) {
         paste(input$Variable, "-", Sys.Date(), ".csv", sep="")
     }, 
     content = function(go){write.csv(data.frame(LetsMakeScore_Score(input$Variable)), go)})
-}
-
-shinyApp(ui, server)
-```
-
-```{r, eval=FALSE, include=FALSE}
-# 인구 밀도에 따른 국내 지도 시각화
-
-library(sp)
-library(rgdal)
-
-TL = readOGR(mylocation, "LI") # 첫 인자에 파일 위치, 두번째 인자에 파일명
-
-# Option1 불러온 공간 데이터 내에서 좌표계 방식 변환  (UTM-K -> WGS84)
-
-# from.crs = TL@proj4string
-to_crs = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
-TL_1 = spTransform(TL, to_crs)
-
-tmp_1 = TL_1@data
-
-for (i in 1:nrow(tmp_1)){
-  tmp_1$x_coord[i] = parse_number(as.character(TL_1@polygons[[i]]@labpt)[1])
-  tmp_1$y_coord[i] = parse_number(as.character(TL_1@polygons[[i]]@labpt)[2])
-}
-
-# Haversine 공식으로 거리 계산
-
-library(geosphere)
-
-dist = list()
-for (i in 1:nrow(tmp_1)){
-dist[[i]] = c(tmp_1$x_coord[i], tmp_1$y_coord[i])
-}
-
-medi = list()
-for (i in 1:nrow(result_table_3)){
-  medi[[i]] = c(parse_number(result_table_3$text2[i]), parse_number(result_table_3$text3[i]))
-}
-
-# 거리 계산하여 10km 이내에 도달 가능한 응급의료기관 수 계산
-
-tmp_1$num = 0
-for (i in 1:length(dist)){
-  for (j in 1:length(medi)){
-  ifelse(distHaversine(dist[[i]], medi[[j]])<10000, tmp_1$num[i] <- tmp_1$num[i]+1, next)
-  }
-}
-```
-
-```{r, eval=FALSE, include=FALSE}
-write.csv(tmp_1, "Haversine_list.csv")
-```
-
-```{r, eval=FALSE, include=FALSE}
-library(leaflet)
-
-TL_1 = sp::merge(TL_1, tmp_1)
-
-# Shiny Dashboard 활용
-
-library(shiny)
-library(shinydashboard)
-
-ui <- fluidPage(
-  mainPanel( 
-leafletOutput(outputId = "mymap")))
-
-server <- function(input, output, session) {
-  pal2 = colorNumeric("viridis", TL_1@data$num, reverse=TRUE)
-  
-  output$mymap = renderLeaflet({leaflet(TL_1) %>%
-    setView(lng=127.7669,lat=35.90776, zoom=7) %>%
-    addProviderTiles('CartoDB.Positron') %>%
-    addPolygons(color='#444444', weight=0.5, opacity = 1.0, fillOpacity = 0.5, fillColor=~pal2(num))
-  })
 }
 
 shinyApp(ui, server)
