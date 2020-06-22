@@ -589,7 +589,7 @@ for (i in 1:nrow(tmp_1)){
  - 두 좌표 사이의 거리를 구할 때는 Haversine 공식을 이용한다. 유클리디안 거리 공식을 사용하지 않은 가장 큰 이유로는 지구가 평면이 아닌 구이므로 곡면상의 두 점의 거리를 구할 때 더욱 정확한 Haversine 공식을 활용하는 것이 타당하다는 판단 때문이었다. 참고: [Wikipedia 'Haversine'](https://en.wikipedia.org/wiki/Haversine_formula)
  - 좌표 사이의 거리가 30km 미만인 병원들의 병원 점수를 합산한다. 이 score_num 값을 시각화에 반영할 것이다.
 
-```{r}
+```{r, echo=TRUE}
 # Haversine 공식으로 거리 계산
 
 library(geosphere)
@@ -621,6 +621,12 @@ for (i in 1:length(dist)){
            next)
   }
 }
+head(tmp_1)
+```
+
+위와 같이 score_num에 30km 내 병원점수의 합이 수집된 것을 알 수 있다.
+
+```{r}
 TL_1 = sp::merge(TL_1, tmp_1)
 
 write.csv(tmp_1, "Haversine_list.csv")
