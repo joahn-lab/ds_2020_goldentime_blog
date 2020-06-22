@@ -86,11 +86,11 @@ library(tictoc)
 사용한 데이터의 출처는 다음과 같다.
 
 1. [공공데이터포털 - 전국 응급의료기관 조회 서비스](https://www.data.go.kr/data/15000563/openapi.do)  
-응급 의료 기관의 좌표, 인프라에 필요한 정보를 얻을 수 있었다.
+응급 의료 기관의 좌표, 인프라에 필요한 정보를 얻을 수 있다. 국립중앙의료원 자료로, 응급의료기관 접근성에 대한 [참고논문](http://kiss.kstudy.com/thesis/thesis-view.asp?key=3675319)에서도 활용하고 있었으며, 응급의료기관에 대한 주기성 데이터를 다른 의료기관 데이터(ex. 건심평 자료)에 비해 풍부하게 제공하고 있어 주로 활용하기로 했다.
 
 2. [전국 행정구역 지역 좌표](http://www.gisdeveloper.co.kr/?p=2332)  
 특정 지역의 기준을 설정할 행정 구역별 좌표를 불러온다.  
-해당 데이터는 폴리곤 좌표로, 이를 경, 위도 좌표로 변환해 사용했다.
+해당 데이터는 폴리곤 좌표로, 이를 경, 위도 좌표계 방식(wgs84)으로 변환해 사용했다.
 
 3. [응급의료기관 평가 - 전국응급의료센터](https://www.e-gen.or.kr/nemc/business_medical_institution_evaluation.do?tabId=3)
 
@@ -99,16 +99,15 @@ library(tictoc)
 ******
 
 ## 데이터 수집
-공공 API를 통한 데이터 수집 코드를 작성하였다.  
+공공 API를 통한 데이터 수집 코드를 작성하였다. api 가이드북을 함께 살펴보며 분석에 반영할 후보 변수를 논의하고 8개 오퍼레이터 중 다음 오퍼레이터만을 사용하기로 했다.
 
 - 사용한 API 목록
   1. 응급의료기관 기본 정보 조회 서비스
   2. 응급의료기관 목록정보 조회
   3. 중증질환자 수용가능 정보 오퍼레이터
   4. 응급의료기관 기본정보 조회 오퍼레이션
-  5. 외상센터 기본정보 조회 오퍼레이션
 
-### 응급의료기관 기본 정보 조회 서비스(예시 코드)
+### 응급의료기관 기본 정보 조회 서비스
 
 ```{r eval=FALSE, result='hide', message=FALSE}
 
@@ -136,19 +135,13 @@ for (i in 1:10){
   result_table_1 = result_table_1 %>% bind_rows(.,tmp_tbl)
 }
   
-which(result_table_1$dutyName == "의료법인명지의료재단명지병원")
-result_table_1[c(23, 391),] # 이름은 같지만 지역이 다른 명지병원이므로 인정
-  # 응급의료기관 지정 병원 갯수가 대략 402개 나옵니다
-  
 write_xlsx(result_table_1, "응급의료기관 기본정보 조회 서비스_1.xlsx")
-write_excel_csv(result_table_1, "result_0527_12_16.csv")
 
 ```
 
 
 ```{r, eval=FALSE, include=FALSE}
 ## 응급의료기관 조회서비스 3번 오퍼레이터 - 좌표값 찾기
-
 
 pageNo = "1"
 numOfRows = "99" # "&pageNo=", pageNo, "&numOfRows=", numOfRows
@@ -170,8 +163,6 @@ for (i in 1:402){
   
 
 write_xlsx(result_table_3, "응급의료기관 목록정보 조회 서비스_3.xlsx")
-
-
 
 ```
 
@@ -250,7 +241,6 @@ for (i in 1:10){
 write_xlsx(result_table_8, "외상센터 기본정보 조회_8.xlsx")
 
 ```
-
 
 ******
 
@@ -565,12 +555,13 @@ LetsMakeScore_CSV(c("응급실","입원실","수술실"))
 
 # 3. 최종 시각화
 
-- 인터렉티브 시각화를 위해 shiny app을 사용했다. 시각화 항목은 다음과 같다.  
+- 인터렉티브 시각화를 위해 shiny와 리플렛 패키지를 사용했다. 시각화 항목은 다음과 같다.  
 
-1. 접근성 점수  
-  - 행정구역을 기준으로 해당 지역에서 응급 의료 접근성 점수를 시각화했다.  
+1. 공간 데이터 호출 및 전처리  
+  - 행정구역 시군구 단위을 기준으로 시군구 단위 지점에서 응급의료기관 접근성 점수를 시각화했다. 이때 앞서 PCA 기법을 통해 산출한 응급의료기관 인프라 점수를 공식 지정 응급의료기관에 부여하여 시각화에 반영한다. 시각화할 데이터는 공간 데이터이므로 별도의 전처리 과정이 필요하다. 행정구역 지리 공간 데이터는 원래 행정안전부 산하 [도로명주소 전자지도 웹사이트](https://www.juso.go.kr/addrlink/devLayerRequestWrite.do)에서 신청하여 구할 수 있으나 [지오서비스](http://www.gisdeveloper.co.kr/?p=2332)에서 shp 파일 형태로 제공하고 있어 이를 참고하였다.
+  - rgdal 패키지로 파일을 불러온 후 좌표계 방식을 변환한다. 대한민국 행정구역 데이터에서는 UTM-K 좌표계를 주로 사용한다고 하는데, 우리가 api에서 호출해서 사용해 온 좌표 데이터는 WGS84 좌표계를 사용하고 있으므로 별도의 변환 없이는 거리 계산이 불가능하기 때문이다.
+  또한 해당 데이터는 폴리곤 다차원 좌표를 사용하므로 계산의 편의를 위해 평면구간 좌표값인 labpt 변수값을 우선 활용하기로 한다.
   
-아래는 하버사인을 통해 거리를 계산하는 코드이다.
 ```{r, eval=FALSE}
 library(sp)
 library(rgdal)
@@ -580,10 +571,7 @@ TL = readOGR(mylocation, "TL_SCCO_LI") # 첫 인자에 파일 위치, 두번째 
 # 불러온 공간 데이터 내에서 좌표계 방식 변환  (UTM-K -> WGS84)
 
 # from.crs = TL@proj4string
-from_crs = CRS("+proj=tmerc +lat_0=38 +lon_0=127.5 +k=0.9996 +x_0=1000000 +y_0=2000000 +ellps=GRS80 +units=m +no_defs")
 to_crs = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs")
-
-proj4string(TL) = from_crs
 TL_1 = spTransform(TL, to_crs)
 
 tmp_1 = TL_1@data
@@ -592,7 +580,16 @@ for (i in 1:nrow(tmp_1)){
   tmp_1$x_coord[i] = parse_number(as.character(TL_1@polygons[[i]]@labpt)[1])
   tmp_1$y_coord[i] = parse_number(as.character(TL_1@polygons[[i]]@labpt)[2])
 }
+```
 
+#### Haversine Calculation
+
+2. 접근성 계산
+ - 행정구역 지점과 응급의료기관 사이의 거리를 계산한다. 이때 도달 거리 기준은 30km로 하는데, 응급상황 발생시 인근 구급차 출동 시간, 응급처치 후 환자 이송시간, 환자 수용 가능 병원 확인 시간 등을 고려했을 때 정부가 설정한 30분의 '골든타임'을 맞추려면 최소한 30km 이내에 응급의료기관이 있어야 한다고 판단했기 때문이다.
+ - 두 좌표 사이의 거리를 구할 때는 Haversine 공식을 이용한다. 유클리디안 거리 공식을 사용하지 않은 가장 큰 이유로는 지구가 평면이 아닌 구이므로 곡면상의 두 점의 거리를 구할 때 더욱 정확한 Haversine 공식을 활용하는 것이 타당하다는 판단 때문이었다. 참고: [Wikipedia 'Haversine'](https://en.wikipedia.org/wiki/Haversine_formula)
+ - 좌표 사이의 거리가 30km 미만인 병원들의 병원 점수를 합산한다. 이 score_num 값을 시각화에 반영할 것이다.
+
+```{r}
 # Haversine 공식으로 거리 계산
 
 library(geosphere)
@@ -616,28 +613,27 @@ for (i in 1:length(dist)){
   }
 }
 
-write.csv(tmp_1, "Haversine_list.csv")
-
-# 간단한 인터랙티브 시각화
-library(leaflet)
-
+tmp_1$score_num = 0
+for (i in 1:length(dist)){
+  for (j in 1:length(medi)){
+    ifelse(distHaversine(dist[[i]], medi[[j]])<30000, 
+           tmp_1$score_num[i] <- tmp_1$score_num[i]+result_table_3$score[j], 
+           next)
+  }
+}
 TL_1 = sp::merge(TL_1, tmp_1)
-pal2 = colorNumeric("viridis", TL_1@data$num, reverse=TRUE)
 
-leaflet(TL_1) %>%
-  setView(lng=127.7669,lat=35.90776, zoom=7) %>%
-  addProviderTiles('CartoDB.Positron') %>%
-  addPolygons(color='#444444', weight=0.5, opacity = 1.0, fillOpacity = 0.5, fillColor=~pal2(num))
-
-
+write.csv(tmp_1, "Haversine_list.csv")
 ```
   
-  
-2. 응급 의료 인프라 점수
-  - 병원명 + 응급 의료 인프라 점수를 통한 히스토그램
+3. 샤이니 대시보드 시각화
 
+- 앞서 행정구역별로 산출한 점수를 TL_1 공간데이터에 병합한 후 이 shp 파일을 리플렛 패키지로 시각화한다. 이때 인터랙티브 시각화의 속도를 고려해 리 단위 데이터에서 시군구 단위 데이터로 시각화를 하게 되었다. 리 단위 데이터는 파이썬 folium 모듈로 별도의 시각화 과정을 거쳤다. (github 내 python 항목 코드 참조)
+- 두 개의 패널로 구분된 대시보드는 지도와 위젯으로 구성되어 있다. 우선 지도의 경우, 사용자가 직관적으로 점수 분포를 확인할 수 있게끔 quantile값으로 색을 구분하여 제시하고 있으며, 범례 및 하이라이트(커서 이동시 라벨 구현) 기능을 추가했다. 얼핏 봐도 대도시나 위성도시 지역을 제외한 강원도 등 산간지역에서는 굉장히 1~2점대의 낮은 점수와 연한 색깔이 분포하고 있는 것을 알 수 있다. 
+- 위젯의 경우 사용자가 원하는 항목을 input값으로 선택했을 때 그 변수를 기준으로 점수가 높게 나오는 병원을 데이터 테이블(datatable) 형태로 보여준다. 따라서 오름/내림차순 정렬이 가능하며 옆에는 간단한 히스토그램으로 점수 분포를 함께 보여줘 사용자 이해를 높인다. 마지막으로 점수와 병원 고유번호를 포함한 csv 파일을 다운받을 수 있도록 구현했다.
 
-아래는 응급 의료 인프라 점수 계산을 위한 시각화 코드이다.
+아래는 응급 의료 인프라 점수 계산을 위한 샤이니 코드이다.
+
 ```{r, eval=FALSE}
 library(tidyverse)
 library(sp)
@@ -798,4 +794,7 @@ server <- function(input, output) {
 shinyApp(ui, server)
 ```
 
+#### 결론
 
+ 제언으로 주민등록 인구 데이터를 반영해 특정 지역구 기준 30% 인구의 거주지가 병원 접근성 점수가 낮은 곳을 알려주는 별도의 시각화 지도를 구현해보려 했으나, 계산 결과 상식적으로 인프라가 좋지 않은 강원도 지역은 인구도 낮아 인구를 반영하여 별도의 시각화를 거치기 어렵다고 생각하게 되었다. 정책적으로 제언할 만한 시각화 방법을 추후에 고민하여 작업을 보완하면 좋겠다는 필요성을 느꼈다.
+ 결과적으로 전공이 다른 조원들과 비대면으로 프로젝트를 진행하는 어려움이 많았지만, 어려운 만큼 많은 것을 배울 숭 있었던 프로젝트였다.
